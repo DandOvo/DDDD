@@ -1,0 +1,4 @@
+/* Visual refresh: keep the login card ready for future soft shadow tweaks */
+:host {
+  display: block;
+}

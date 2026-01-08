@@ -1,0 +1,156 @@
+<div class="container mx-auto p-4">
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-3xl font-bold mb-6">饮食记录</h1>
+    <button
+      (click)="toggleForm()"
+      class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded transition-colors">
+      {{ showForm ? '取消' : '添加记录' }}
+    </button>
+  </div>
+
+  <!-- 添加表单 -->
+  <div *ngIf="showForm" class="bg-white p-6 rounded-lg shadow mb-6">
+    <h2 class="text-xl font-semibold mb-4">添加饮食记录</h2>
+    <form (ngSubmit)="submitForm()">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">餐次 *</label>
+          <select
+            [(ngModel)]="formData.mealType"
+            name="mealType"
+            required
+            class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <option value="">请选择</option>
+            <option value="breakfast">早餐</option>
+            <option value="lunch">午餐</option>
+            <option value="dinner">晚餐</option>
+            <option value="snack">加餐</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">食物名称 *</label>
+          <input
+            type="text"
+            [(ngModel)]="formData.foodName"
+            name="foodName"
+            required
+            class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="例: 鸡胸肉沙拉">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">卡路里 (kcal)</label>
+          <input
+            type="number"
+            min="0"
+            max="5000"
+            [(ngModel)]="formData.calories"
+            name="calories"
+            class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="例: 350">
+          <p class="text-xs text-gray-500 mt-1">范围: 0-5000 kcal</p>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">蛋白质 (g)</label>
+          <input
+            type="number"
+            step="0.1"
+            min="0"
+            max="500"
+            [(ngModel)]="formData.protein"
+            name="protein"
+            class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="例: 30">
+          <p class="text-xs text-gray-500 mt-1">范围: 0-500 g</p>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">碳水化合物 (g)</label>
+          <input
+            type="number"
+            step="0.1"
+            min="0"
+            max="1000"
+            [(ngModel)]="formData.carbohydrates"
+            name="carbohydrates"
+            class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="例: 20">
+          <p class="text-xs text-gray-500 mt-1">范围: 0-1000 g</p>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">脂肪 (g)</label>
+          <input
+            type="number"
+            step="0.1"
+            min="0"
+            max="500"
+            [(ngModel)]="formData.fat"
+            name="fat"
+            class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="例: 10">
+          <p class="text-xs text-gray-500 mt-1">范围: 0-500 g</p>
+        </div>
+      </div>
+      <div class="mb-4">
+        <label class="block text-sm font-medium text-gray-700 mb-2">份量</label>
+        <input
+          type="text"
+          [(ngModel)]="formData.servingSize"
+          name="servingSize"
+          class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+          placeholder="例: 150g">
+      </div>
+      <div class="mb-4">
+        <label class="block text-sm font-medium text-gray-700 mb-2">备注</label>
+        <textarea
+          [(ngModel)]="formData.notes"
+          name="notes"
+          rows="2"
+          class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+          placeholder="输入备注信息（可选）"></textarea>
+      </div>
+      <div class="flex justify-end gap-2">
+        <button
+          type="button"
+          (click)="toggleForm()"
+          class="px-4 py-2 border border-gray-300 rounded hover:bg-gray-50 transition-colors">
+          取消
+        </button>
+        <button
+          type="submit"
+          class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors">
+          保存
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <div *ngIf="loading" class="text-center py-12">加载中...</div>
+
+  <div *ngIf="!loading && nutritionRecords.length === 0" class="text-center py-12">暂无记录</div>
+
+  <div *ngIf="!loading && nutritionRecords.length > 0" class="bg-white rounded-lg shadow overflow-hidden">
+    <table class="min-w-full">
+      <thead class="bg-gray-50">
+        <tr>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">日期</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">餐次</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">食物</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">卡路里</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">蛋白质</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">操作</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-200">
+        <tr *ngFor="let record of nutritionRecords" class="hover:bg-gray-50">
+          <td class="px-6 py-4">{{ record.recordedAt | date:'yyyy-MM-dd HH:mm' }}</td>
+          <td class="px-6 py-4">{{ record.mealType }}</td>
+          <td class="px-6 py-4">{{ record.foodName }}</td>
+          <td class="px-6 py-4">{{ record.calories }} kcal</td>
+          <td class="px-6 py-4">{{ record.protein }}g</td>
+          <td class="px-6 py-4">
+            <button (click)="delete(record.id)" class="text-red-600 hover:text-red-900">删除</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

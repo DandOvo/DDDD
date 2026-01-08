@@ -1,0 +1,122 @@
+<div class="container mx-auto p-4">
+  <h1 class="text-3xl font-bold mb-6">健身仪表盘</h1>
+
+  <div *ngIf="loading" class="flex justify-center items-center h-64">
+    <div class="text-gray-500">加载中...</div>
+  </div>
+
+  <div *ngIf="error" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+    {{ error }}
+  </div>
+
+  <div *ngIf="!loading && !error && overview" class="space-y-6">
+    <!-- 统计卡片 -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <!-- 体重卡片 -->
+      <div class="bg-white p-6 rounded-lg shadow hover:shadow-lg transition-shadow">
+        <div class="flex items-center justify-between">
+          <div>
+            <h3 class="text-gray-500 text-sm font-medium">最新体重</h3>
+            <p class="text-3xl font-bold text-blue-600 mt-2">
+              {{ overview.bodyMetrics?.latestWeight || '-' }}
+              <span class="text-lg text-gray-500" *ngIf="overview.bodyMetrics?.latestWeight">kg</span>
+            </p>
+            <p class="text-sm text-gray-500 mt-1" *ngIf="overview.bodyMetrics?.weightChange !== undefined">
+              <span [class]="(overview.bodyMetrics?.weightChange || 0) > 0 ? 'text-red-500' : 'text-green-500'">
+                {{ (overview.bodyMetrics?.weightChange || 0) > 0 ? '+' : '' }}{{ overview.bodyMetrics?.weightChange }} kg
+              </span>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- BMI卡片 -->
+      <div class="bg-white p-6 rounded-lg shadow hover:shadow-lg transition-shadow">
+        <div class="flex items-center justify-between">
+          <div>
+            <h3 class="text-gray-500 text-sm font-medium">BMI指数</h3>
+            <p class="text-3xl font-bold text-green-600 mt-2">
+              {{ overview.bodyMetrics?.latestBmi || '-' }}
+            </p>
+            <p class="text-sm text-gray-500 mt-1">体脂率: {{ overview.bodyMetrics?.latestBodyFat || '-' }}%</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 运动次数卡片 -->
+      <div class="bg-white p-6 rounded-lg shadow hover:shadow-lg transition-shadow">
+        <div class="flex items-center justify-between">
+          <div>
+            <h3 class="text-gray-500 text-sm font-medium">运动次数</h3>
+            <p class="text-3xl font-bold text-purple-600 mt-2">
+              {{ overview.workoutStats?.totalWorkouts || 0 }}
+            </p>
+            <p class="text-sm text-gray-500 mt-1">过去30天</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 消耗卡路里卡片 -->
+      <div class="bg-white p-6 rounded-lg shadow hover:shadow-lg transition-shadow">
+        <div class="flex items-center justify-between">
+          <div>
+            <h3 class="text-gray-500 text-sm font-medium">消耗卡路里</h3>
+            <p class="text-3xl font-bold text-orange-600 mt-2">
+              {{ overview.workoutStats?.totalCalories || 0 }}
+            </p>
+            <p class="text-sm text-gray-500 mt-1">kcal</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 第二行统计 -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <!-- 运动总时长 -->
+      <div class="bg-white p-6 rounded-lg shadow">
+        <h3 class="text-gray-500 text-sm font-medium mb-2">运动总时长</h3>
+        <p class="text-2xl font-bold">
+          {{ formatDuration(overview.workoutStats?.totalDuration) }}
+        </p>
+      </div>
+
+      <!-- 总摄入卡路里 -->
+      <div class="bg-white p-6 rounded-lg shadow">
+        <h3 class="text-gray-500 text-sm font-medium mb-2">摄入卡路里</h3>
+        <p class="text-2xl font-bold">
+          {{ overview.nutritionStats?.totalCalories || 0 }} kcal
+        </p>
+        <p class="text-sm text-gray-500 mt-1">
+          蛋白质: {{ overview.nutritionStats?.totalProtein || 0 }}g
+        </p>
+      </div>
+
+      <!-- 进度照片 -->
+      <div class="bg-white p-6 rounded-lg shadow">
+        <h3 class="text-gray-500 text-sm font-medium mb-2">进度照片</h3>
+        <p class="text-2xl font-bold">
+          {{ overview.totalProgressPhotos || 0 }}
+        </p>
+      </div>
+    </div>
+
+    <!-- 快捷操作 -->
+    <div class="bg-white p-6 rounded-lg shadow">
+      <h2 class="text-xl font-bold mb-4">快捷操作</h2>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <button routerLink="/body-metrics" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-3 rounded transition-colors">
+          记录体重
+        </button>
+        <button routerLink="/workouts" class="bg-purple-500 hover:bg-purple-600 text-white px-4 py-3 rounded transition-colors">
+          记录运动
+        </button>
+        <button routerLink="/nutrition" class="bg-green-500 hover:bg-green-600 text-white px-4 py-3 rounded transition-colors">
+          记录饮食
+        </button>
+        <button routerLink="/progress-photos" class="bg-orange-500 hover:bg-orange-600 text-white px-4 py-3 rounded transition-colors">
+          上传照片
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

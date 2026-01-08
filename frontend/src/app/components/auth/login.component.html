@@ -1,0 +1,93 @@
+<!-- UI refresh: two-tone info panel and reorganized form using updated bindings -->
+<div class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-4xl w-full grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+    <div class="hidden md:flex flex-col gap-4 bg-gradient-to-br from-emerald-600 to-emerald-400 rounded-3xl p-8 text-white shadow-2xl">
+      <h2 class="text-3xl font-black leading-tight">Sign in to Cloud Media</h2>
+      <p class="text-sm opacity-90">Pick up where you left off and keep your media synced across devices.</p>
+      <div class="grid grid-cols-2 gap-3 text-sm">
+        <div class="bg-white/10 rounded-xl p-3 backdrop-blur-sm">
+          <p class="font-semibold">Fast uploads</p>
+          <p class="opacity-80">Images & videos with instant previews.</p>
+        </div>
+        <div class="bg-white/10 rounded-xl p-3 backdrop-blur-sm">
+          <p class="font-semibold">Secure access</p>
+          <p class="opacity-80">Backed by your Azure stack.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card shadow-2xl">
+      <div class="text-left mb-6">
+        <p class="text-xs uppercase tracking-wide text-emerald-600 font-semibold">Welcome back</p>
+        <h3 class="text-2xl font-bold text-slate-900">Sign in</h3>
+        <p class="text-sm text-slate-500 mt-1">Use your email and password to continue.</p>
+      </div>
+
+      <form [formGroup]="signinForm" (ngSubmit)="submitCredentials()" class="space-y-5">
+        <div *ngIf="formError" class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl">
+          {{ formError }}
+        </div>
+
+        <div class="space-y-1">
+          <label for="email" class="block text-sm font-semibold text-slate-700">
+            Email Address
+          </label>
+          <input
+            id="email"
+            type="email"
+            formControlName="email"
+            class="input-field"
+            placeholder="you@example.com"
+            [class.border-red-500]="controls['email'].invalid && controls['email'].touched"
+          />
+          <div *ngIf="controls['email'].invalid && controls['email'].touched" class="text-xs text-red-600">
+            <span *ngIf="controls['email'].errors?.['required']">Email is required</span>
+            <span *ngIf="controls['email'].errors?.['email']">Enter a valid email</span>
+          </div>
+        </div>
+
+        <div class="space-y-1">
+          <label for="password" class="block text-sm font-semibold text-slate-700">
+            Password
+          </label>
+          <input
+            id="password"
+            type="password"
+            formControlName="password"
+            class="input-field"
+            placeholder="Enter your password"
+            [class.border-red-500]="controls['password'].invalid && controls['password'].touched"
+          />
+          <div *ngIf="controls['password'].invalid && controls['password'].touched" class="text-xs text-red-600">
+            <span *ngIf="controls['password'].errors?.['required']">Password is required</span>
+            <span *ngIf="controls['password'].errors?.['minlength']">At least 6 characters</span>
+          </div>
+        </div>
+
+        <button
+          type="submit"
+          [disabled]="isSubmitting || signinForm.invalid"
+          class="w-full btn-primary disabled:opacity-60 disabled:cursor-not-allowed"
+        >
+          <span *ngIf="!isSubmitting">Sign In</span>
+          <span *ngIf="isSubmitting" class="flex items-center justify-center gap-2">
+            <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            Signing in...
+          </span>
+        </button>
+
+        <div class="text-center pt-2">
+          <p class="text-sm text-slate-500">
+            New here?
+            <a routerLink="/register" class="font-semibold text-emerald-700 hover:text-emerald-800">
+              Create an account
+            </a>
+          </p>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

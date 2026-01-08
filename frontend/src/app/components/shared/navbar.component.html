@@ -1,0 +1,156 @@
+<!-- UI refresh: glassy bar with pill links and updated bindings while keeping navigation flow unchanged -->
+<nav class="sticky top-0 z-30 bg-white/80 backdrop-blur border-b border-emerald-100 nav-shadow">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center h-16 justify-between">
+      <!-- Logo and Brand -->
+      <div class="flex items-center gap-3">
+        <a routerLink="/" class="flex items-center gap-2">
+          <div class="h-10 w-10 rounded-xl bg-emerald-100 flex items-center justify-center shadow-inner">
+            <svg class="h-6 w-6 text-emerald-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
+          </div>
+          <div class="leading-tight">
+            <span class="block text-lg font-bold text-emerald-800">Fitness Tracker</span>
+            <span class="block text-xs text-slate-500">健身分析平台</span>
+          </div>
+        </a>
+      </div>
+
+      <!-- Desktop Navigation -->
+      <div class="hidden md:flex items-center gap-3">
+        <ng-container *ngIf="hasSession()">
+          <a routerLink="/dashboard" routerLinkActive="pill-tab-active" class="pill-tab pill-tab-muted">
+            仪表盘
+          </a>
+          <a routerLink="/body-metrics" routerLinkActive="pill-tab-active" class="pill-tab pill-tab-muted">
+            身体指标
+          </a>
+          <a routerLink="/workouts" routerLinkActive="pill-tab-active" class="pill-tab pill-tab-muted">
+            运动记录
+          </a>
+          <a routerLink="/nutrition" routerLinkActive="pill-tab-active" class="pill-tab pill-tab-muted">
+            饮食记录
+          </a>
+          <a routerLink="/progress-photos" routerLinkActive="pill-tab-active" class="pill-tab pill-tab-muted">
+            进度照片
+          </a>
+          <div class="flex items-center gap-2 pl-3 border-l border-slate-200">
+            <span class="text-sm text-slate-600">Hi, <span class="font-semibold text-emerald-800">{{ sessionUser?.username }}</span></span>
+            <button (click)="signOut()" class="btn-secondary">
+              Logout
+            </button>
+          </div>
+        </ng-container>
+
+        <ng-container *ngIf="!hasSession()">
+          <a routerLink="/login" class="btn-secondary">
+            Sign In
+          </a>
+          <a routerLink="/register" class="btn-primary">
+            Create Account
+          </a>
+        </ng-container>
+      </div>
+
+      <!-- Mobile menu button -->
+      <div class="md:hidden flex items-center">
+        <button
+          (click)="toggleNavigation()"
+          class="p-2 rounded-lg border border-emerald-100 text-emerald-700 hover:bg-emerald-50 transition"
+        >
+          <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path
+              *ngIf="!navDrawerOpen"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 6h16M4 12h16M4 18h16"
+            />
+            <path
+              *ngIf="navDrawerOpen"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M6 18L18 6M6 6l12 12"
+            />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile Navigation -->
+  <div *ngIf="navDrawerOpen" class="md:hidden border-t border-emerald-100 bg-white/90 backdrop-blur">
+    <div class="px-4 pt-3 pb-4 space-y-2">
+      <ng-container *ngIf="hasSession()">
+        <a
+          routerLink="/dashboard"
+          routerLinkActive="pill-tab-active"
+          class="block px-3 py-2 rounded-xl text-base font-semibold text-slate-700 hover:bg-emerald-50"
+          (click)="toggleNavigation()"
+        >
+          仪表盘
+        </a>
+        <a
+          routerLink="/body-metrics"
+          routerLinkActive="pill-tab-active"
+          class="block px-3 py-2 rounded-xl text-base font-semibold text-slate-700 hover:bg-emerald-50"
+          (click)="toggleNavigation()"
+        >
+          身体指标
+        </a>
+        <a
+          routerLink="/workouts"
+          routerLinkActive="pill-tab-active"
+          class="block px-3 py-2 rounded-xl text-base font-semibold text-slate-700 hover:bg-emerald-50"
+          (click)="toggleNavigation()"
+        >
+          运动记录
+        </a>
+        <a
+          routerLink="/nutrition"
+          routerLinkActive="pill-tab-active"
+          class="block px-3 py-2 rounded-xl text-base font-semibold text-slate-700 hover:bg-emerald-50"
+          (click)="toggleNavigation()"
+        >
+          饮食记录
+        </a>
+        <a
+          routerLink="/progress-photos"
+          routerLinkActive="pill-tab-active"
+          class="block px-3 py-2 rounded-xl text-base font-semibold text-slate-700 hover:bg-emerald-50"
+          (click)="toggleNavigation()"
+        >
+          进度照片
+        </a>
+
+        <div class="border-t border-emerald-100 pt-3 mt-2">
+          <div class="px-3 py-2 rounded-xl bg-emerald-50">
+            <p class="text-sm text-emerald-800 mb-2">Signed in as <span class="font-semibold">{{ sessionUser?.username }}</span></p>
+            <button (click)="signOut(); toggleNavigation()" class="w-full btn-secondary">
+              Logout
+            </button>
+          </div>
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="!hasSession()">
+        <a
+          routerLink="/login"
+          class="block px-3 py-2 rounded-xl text-base font-semibold text-slate-700 hover:bg-emerald-50"
+          (click)="toggleNavigation()"
+        >
+          Sign In
+        </a>
+        <a
+          routerLink="/register"
+          class="block px-3 py-2 rounded-xl text-base font-semibold text-slate-700 hover:bg-emerald-50"
+          (click)="toggleNavigation()"
+        >
+          Create Account
+        </a>
+      </ng-container>
+    </div>
+  </div>
+</nav>

@@ -1,0 +1,8 @@
+/* Visual refresh: light drop shadow on the nav bar */
+:host {
+  display: block;
+}
+
+.nav-shadow {
+  box-shadow: 0 12px 30px rgba(16, 185, 129, 0.08);
+}

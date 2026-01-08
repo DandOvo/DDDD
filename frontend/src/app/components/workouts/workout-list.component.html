@@ -1,0 +1,129 @@
+<div class="container mx-auto p-4">
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-3xl font-bold mb-6">运动记录</h1>
+    <button
+      (click)="toggleForm()"
+      class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded transition-colors">
+      {{ showForm ? '取消' : '添加记录' }}
+    </button>
+  </div>
+
+  <!-- 添加表单 -->
+  <div *ngIf="showForm" class="bg-white p-6 rounded-lg shadow mb-6">
+    <h2 class="text-xl font-semibold mb-4">添加运动记录</h2>
+    <form (ngSubmit)="submitForm()">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">运动类型 *</label>
+          <select
+            [(ngModel)]="formData.workoutType"
+            name="workoutType"
+            required
+            class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <option value="">请选择</option>
+            <option value="running">跑步</option>
+            <option value="cycling">骑行</option>
+            <option value="swimming">游泳</option>
+            <option value="walking">步行</option>
+            <option value="weight_training">力量训练</option>
+            <option value="yoga">瑜伽</option>
+            <option value="other">其他</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">时长 (分钟) *</label>
+          <input
+            type="number"
+            min="1"
+            max="600"
+            [(ngModel)]="formData.duration"
+            name="duration"
+            required
+            class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="例: 30">
+          <p class="text-xs text-gray-500 mt-1">范围: 1-600 分钟</p>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">距离 (km，可选)</label>
+          <input
+            type="number"
+            step="0.1"
+            min="0"
+            max="500"
+            [(ngModel)]="formData.distance"
+            name="distance"
+            class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="例: 5.0">
+          <p class="text-xs text-gray-500 mt-1">范围: 0-500 km</p>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">强度</label>
+          <select
+            [(ngModel)]="formData.intensity"
+            name="intensity"
+            class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <option value="">请选择</option>
+            <option value="low">低强度</option>
+            <option value="moderate">中强度</option>
+            <option value="high">高强度</option>
+          </select>
+        </div>
+      </div>
+      <div class="mb-4">
+        <label class="block text-sm font-medium text-gray-700 mb-2">备注</label>
+        <textarea
+          [(ngModel)]="formData.notes"
+          name="notes"
+          rows="2"
+          class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+          placeholder="输入备注信息（可选）"></textarea>
+      </div>
+      <div class="flex justify-end gap-2">
+        <button
+          type="button"
+          (click)="toggleForm()"
+          class="px-4 py-2 border border-gray-300 rounded hover:bg-gray-50 transition-colors">
+          取消
+        </button>
+        <button
+          type="submit"
+          class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors">
+          保存
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <div *ngIf="loading" class="text-center py-12">
+    <p class="text-gray-500">加载中...</p>
+  </div>
+
+  <div *ngIf="!loading && workouts.length === 0" class="text-center py-12">
+    <p class="text-gray-500">暂无运动记录</p>
+  </div>
+
+  <div *ngIf="!loading && workouts.length > 0" class="bg-white rounded-lg shadow overflow-hidden">
+    <table class="min-w-full">
+      <thead class="bg-gray-50">
+        <tr>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">日期</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">类型</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">时长</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">卡路里</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">操作</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-200">
+        <tr *ngFor="let workout of workouts" class="hover:bg-gray-50">
+          <td class="px-6 py-4">{{ workout.startTime | date:'yyyy-MM-dd HH:mm' }}</td>
+          <td class="px-6 py-4">{{ workout.workoutType }}</td>
+          <td class="px-6 py-4">{{ formatDuration(workout.duration) }}</td>
+          <td class="px-6 py-4">{{ workout.caloriesBurned }} kcal</td>
+          <td class="px-6 py-4">
+            <button (click)="deleteWorkout(workout.id)" class="text-red-600 hover:text-red-900">删除</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -1,0 +1,4 @@
+/* Visual refresh: placeholder to extend register page effects if needed */
+:host {
+  display: block;
+}

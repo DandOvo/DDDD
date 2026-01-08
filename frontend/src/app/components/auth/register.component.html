@@ -1,0 +1,122 @@
+<!-- UI refresh: dual-tone layout with reordered fields and updated bindings -->
+<div class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-5xl w-full grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
+    <div class="card bg-white shadow-2xl border border-emerald-100">
+      <p class="text-xs uppercase tracking-wide text-emerald-600 font-semibold">Create account</p>
+      <h2 class="text-3xl font-bold text-slate-900">Join Cloud Media</h2>
+      <p class="text-sm text-slate-500 mt-2">Set up your profile to start uploading and organizing files.</p>
+
+      <form [formGroup]="signupForm" (ngSubmit)="submitRegistration()" class="space-y-5 mt-6">
+        <div *ngIf="formError" class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl">
+          {{ formError }}
+        </div>
+
+        <div class="space-y-1">
+          <label for="username" class="block text-sm font-semibold text-slate-700">
+            Username
+          </label>
+          <input
+            id="username"
+            type="text"
+            formControlName="username"
+            class="input-field"
+            placeholder="Pick a username"
+            [class.border-red-500]="controls['username'].invalid && controls['username'].touched"
+          />
+          <div *ngIf="controls['username'].invalid && controls['username'].touched" class="text-xs text-red-600">
+            <span *ngIf="controls['username'].errors?.['required']">Username is required</span>
+            <span *ngIf="controls['username'].errors?.['minlength']">At least 3 characters</span>
+          </div>
+        </div>
+
+        <div class="space-y-1">
+          <label for="email" class="block text-sm font-semibold text-slate-700">
+            Email Address
+          </label>
+          <input
+            id="email"
+            type="email"
+            formControlName="email"
+            class="input-field"
+            placeholder="you@example.com"
+            [class.border-red-500]="controls['email'].invalid && controls['email'].touched"
+          />
+          <div *ngIf="controls['email'].invalid && controls['email'].touched" class="text-xs text-red-600">
+            <span *ngIf="controls['email'].errors?.['required']">Email is required</span>
+            <span *ngIf="controls['email'].errors?.['email']">Enter a valid email</span>
+          </div>
+        </div>
+
+        <div class="space-y-1">
+          <label for="password" class="block text-sm font-semibold text-slate-700">
+            Password
+          </label>
+          <input
+            id="password"
+            type="password"
+            formControlName="password"
+            class="input-field"
+            placeholder="Create a password"
+            [class.border-red-500]="controls['password'].invalid && controls['password'].touched"
+          />
+          <div *ngIf="controls['password'].invalid && controls['password'].touched" class="text-xs text-red-600">
+            <span *ngIf="controls['password'].errors?.['required']">Password is required</span>
+            <span *ngIf="controls['password'].errors?.['minlength']">At least 6 characters</span>
+          </div>
+        </div>
+
+        <div class="space-y-1">
+          <label for="confirmPassword" class="block text-sm font-semibold text-slate-700">
+            Confirm Password
+          </label>
+          <input
+            id="confirmPassword"
+            type="password"
+            formControlName="confirmPassword"
+            class="input-field"
+            placeholder="Repeat your password"
+            [class.border-red-500]="controls['confirmPassword'].invalid && controls['confirmPassword'].touched"
+          />
+          <div *ngIf="controls['confirmPassword'].invalid && controls['confirmPassword'].touched" class="text-xs text-red-600">
+            <span *ngIf="controls['confirmPassword'].errors?.['required']">Please confirm your password</span>
+            <span *ngIf="controls['confirmPassword'].errors?.['passwordMismatch']">Passwords do not match</span>
+          </div>
+        </div>
+
+        <button
+          type="submit"
+          [disabled]="isSubmitting || signupForm.invalid"
+          class="w-full btn-primary disabled:opacity-60 disabled:cursor-not-allowed"
+        >
+          <span *ngIf="!isSubmitting">Create Account</span>
+          <span *ngIf="isSubmitting" class="flex items-center justify-center gap-2">
+            <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            Creating account...
+          </span>
+        </button>
+
+        <div class="text-center pt-2">
+          <p class="text-sm text-slate-500">
+            Already registered?
+            <a routerLink="/login" class="font-semibold text-emerald-700 hover:text-emerald-800">
+              Sign in
+            </a>
+          </p>
+        </div>
+      </form>
+    </div>
+
+    <div class="hidden lg:flex flex-col gap-4 rounded-3xl bg-gradient-to-br from-amber-400 via-amber-300 to-emerald-300 p-8 shadow-2xl text-emerald-900">
+      <h3 class="text-2xl font-black">Why join?</h3>
+      <ul class="space-y-3 text-sm font-semibold">
+        <li class="flex gap-2 items-start"><span class="mt-1 h-2 w-2 rounded-full bg-emerald-700"></span>Instant previews and tag management</li>
+        <li class="flex gap-2 items-start"><span class="mt-1 h-2 w-2 rounded-full bg-emerald-700"></span>Backed by Azure Blob & Cosmos DB</li>
+        <li class="flex gap-2 items-start"><span class="mt-1 h-2 w-2 rounded-full bg-emerald-700"></span>Responsive UI built with Angular + Tailwind</li>
+        <li class="flex gap-2 items-start"><span class="mt-1 h-2 w-2 rounded-full bg-emerald-700"></span>Designed for COM682 coursework delivery</li>
+      </ul>
+    </div>
+  </div>
+</div>

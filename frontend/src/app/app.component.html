@@ -1,0 +1,10 @@
+<!-- Layout refresh: wrap app in soft gradient shell while keeping navbar/footer unchanged -->
+<div class="min-h-screen bg-transparent">
+  <div class="flex flex-col min-h-screen">
+    <app-navbar></app-navbar>
+    <main class="flex-grow">
+      <router-outlet></router-outlet>
+    </main>
+    <app-footer></app-footer>
+  </div>
+</div>
